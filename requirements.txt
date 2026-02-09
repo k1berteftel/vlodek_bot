@@ -1,0 +1,14 @@
+aiogram
+aiogram_dialog
+APScheduler
+asyncpg
+environs
+nats-py
+ormsgpack
+openpyxl
+greenlet
+pydantic
+SQLAlchemy
+pytz
+kurigram
+
