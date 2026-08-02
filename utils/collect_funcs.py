@@ -43,6 +43,7 @@ async def collect_users_base(account: str, bot: Bot, user_id: int, channel: str 
         )
         return None
 
+
     async with app:
         chat = await app.get_chat(channel)
         channel_type = chat.type
@@ -127,6 +128,7 @@ async def filter_user_base(account: str, channel: str | int, user_id: int, bot: 
 
 async def get_channels(account: str, bot: Bot, user_id: int, manager: ClientManager):
     try:
+        await manager.clear_client(user_id)
         app = Client(f'accounts/{user_id}_{account.replace(" ", "_")}', api_id=config.user_bot.api_id, api_hash=config.user_bot.api_hash)
         await manager.add_client(user_id, app)
         await app.start()

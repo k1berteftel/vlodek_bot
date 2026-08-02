@@ -28,9 +28,7 @@ config: Config = load_config()
 async def start_getter(event_from_user: User, dialog_manager: DialogManager, **kwargs):
     session: DataInteraction = dialog_manager.middleware_data.get('session')
     admin = False
-    admins = [*config.bot.admin_ids]
-    admins.extend([admin.user_id for admin in await session.get_admins()])
-    if event_from_user.id in admins:
+    if event_from_user.id in config.bot.admin_ids:
         admin = True
     return {'admin': admin}
 
