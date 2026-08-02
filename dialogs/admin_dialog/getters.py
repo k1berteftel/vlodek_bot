@@ -11,6 +11,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from utils.build_ids import get_random_id
 from utils.schedulers import send_messages
+from utils.tables_parse import get_tables
 from database.action_data_class import DataInteraction
 from config_data.config import load_config, Config
 from states.state_groups import startSG, adminSG
@@ -52,14 +53,14 @@ async def get_static(clb: CallbackQuery, widget: Button, dialog_manager: DialogM
 async def get_users_txt(clb: CallbackQuery, widget: Button, dialog_manager: DialogManager):
     session: DataInteraction = dialog_manager.middleware_data.get('session')
     users = await session.get_users()
-    with open('users.txt', 'a+') as file:
-        for user in users:
-            file.write(f'{user.user_id}\n')
+    table_users = [[user.user_id, user.username] for user in users]
+    table_users.insert(0, ['User ID', 'Username'])
+    table = get_tables(table_users, 'Пользователи')
     await clb.message.answer_document(
-        document=FSInputFile(path='users.txt')
+        document=FSInputFile(table)
     )
     try:
-        os.remove('users.txt')
+        os.remove(table)
     except Exception:
         ...
 

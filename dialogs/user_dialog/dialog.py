@@ -15,6 +15,7 @@ user_dialog = Dialog(
         Column(
             Button(Const('✉️Запустить рассылку'), id='mail_account_choose', on_click=getters.choose_account_switcher),
             Button(Const('🗂Собрать базу'), id='base_account_choose', on_click=getters.choose_account_switcher),
+
             SwitchTo(Const('👥Управление аккаунтами'), id='accounts_switcher', state=startSG.accounts),
             Start(Const('Админ панель'), id='admin', state=adminSG.start, when='admin')
         ),
