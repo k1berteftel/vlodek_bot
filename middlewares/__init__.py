@@ -1,2 +1,3 @@
 from .transfer_middleware import TransferObjectsMiddleware
 from .condition_middleware import RemindMiddleware
+from .block_middleware import BlockMiddleware

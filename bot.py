@@ -17,7 +17,7 @@ from database.model import Base
 from config_data.config import load_config, Config
 from handlers.user_handlers import user_router
 from dialogs import get_dialogs
-from middlewares import TransferObjectsMiddleware, RemindMiddleware
+from middlewares import TransferObjectsMiddleware, RemindMiddleware, BlockMiddleware
 
 
 timezone = pytz.timezone('Europe/Moscow')
@@ -60,6 +60,7 @@ async def main():
     dp.include_routers(user_router, *get_dialogs())
 
     # подключаем middleware
+    dp.update.outer_middleware(BlockMiddleware())
     dp.update.middleware(TransferObjectsMiddleware())
     dp.update.middleware(RemindMiddleware())
 
