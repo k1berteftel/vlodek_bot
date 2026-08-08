@@ -23,7 +23,8 @@ class RemindMiddleware(BaseMiddleware):
     ) -> Any:
         user: User = data.get('event_from_user')
         bot: Bot = data.get('bot')
-        context: FSMContext = data.get('context')
+        print(data)
+        context: FSMContext = data.get('state')
         db: DataInteraction = data.get('session')
 
         if user is None:
