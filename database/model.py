@@ -21,6 +21,8 @@ class UsersTable(Base):
     activity: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=False), default=func.now())
     entry: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=False), default=func.now())
 
+    authorized: Mapped[bool] = mapped_column(Boolean, default=False, server_default=False)
+
 
 class AccountsTable(Base):
     __tablename__ = 'accounts'

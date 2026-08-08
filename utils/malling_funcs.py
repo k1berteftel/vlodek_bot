@@ -131,10 +131,13 @@ async def process_malling(account: str, base: list[str], user_id: int, text: str
                     f"⚠️ Неверный формат юзернейма: {len(results['invalid'])}\n"
                     f"⛔ Нет прав на отправку: {len(results['write_forbidden'])}\n"
                     f"❌ Неизвестная ошибка: {len(results['failed'])}")
-            await bot.send_message(
-                chat_id=user_id,
-                text=text
-            )
+            try:
+                await bot.send_message(
+                    chat_id=user_id,
+                    text=text
+                )
+            except Exception:
+                ...
             await bot.send_message(
                 chat_id=user_id,
                 text='❗️Telegram сбросил сессию вашего аккаунта из-за спама, '

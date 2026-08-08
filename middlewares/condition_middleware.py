@@ -3,9 +3,11 @@ from typing import Any, Awaitable, Callable, Dict
 
 from aiogram import BaseMiddleware, Bot
 from aiogram.types import TelegramObject, User
+from aiogram.fsm.context import FSMContext
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from database.action_data_class import DataInteraction
+from states.state_groups import AuthorizeSG
 from config_data.config import load_config, Config
 
 config: Config = load_config()
@@ -20,12 +22,24 @@ class RemindMiddleware(BaseMiddleware):
         data: Dict[str, Any]
     ) -> Any:
         user: User = data.get('event_from_user')
+        bot: Bot = data.get('bot')
+        context: FSMContext = data.get('context')
+        db: DataInteraction = data.get('session')
 
         if user is None:
             return await handler(event, data)
 
         session: DataInteraction = data.get('session')
         await session.set_activity(user_id=user.id)
+
+        db_user = await db.get_user(user.id)
+        if not db_user.authorized:
+            await bot.send_message(
+                chat_id=user.id,
+                text='Чтобы продолжить пользоваться ботом введите пароль:'
+            )
+            await context.set_state(AuthorizeSG.get_password)
+            return
 
         result = await handler(event, data)
         return result

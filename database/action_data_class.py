@@ -117,6 +117,13 @@ class DataInteraction():
             ))
             await session.commit()
 
+    async def set_authorized(self, user_id: int):
+        async with self._sessions() as session:
+            await session.execute(update(UsersTable).where(UsersTable.user_id == user_id).values(
+                authorized=True
+            ))
+            await session.commit()
+
     async def del_account(self, id: int):
         async with self._sessions() as session:
             await session.execute(delete(AccountsTable).where(AccountsTable.id == id))

@@ -1,12 +1,14 @@
 import logging
 from typing import Any, Awaitable, Callable, Dict
 
-from aiogram import BaseMiddleware
+from aiogram import BaseMiddleware, Bot
 from aiogram.types import TelegramObject, User
+from aiogram.fsm.context import FSMContext
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from database.action_data_class import DataInteraction
+from states.state_groups import AuthorizeSG
 
 logger = logging.getLogger(__name__)
 

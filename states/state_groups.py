@@ -35,3 +35,7 @@ class adminSG(StatesGroup):
     admin_menu = State()
     admin_del = State()
     admin_add = State()
+
+
+class AuthorizeSG(StatesGroup):
+    get_password = State()
