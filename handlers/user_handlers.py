@@ -1,6 +1,7 @@
 from aiogram import Router, F, Bot
 from aiogram.filters import CommandStart, CommandObject, StateFilter
 from aiogram.types import Message, CallbackQuery
+from aiogram.fsm.context import FSMContext
 from aiogram_dialog import DialogManager, StartMode
 
 from database.action_data_class import DataInteraction
@@ -46,9 +47,10 @@ async def start_dialog(msg: Message, dialog_manager: DialogManager, session: Dat
 
 
 @user_router.message(F.text)
-async def handle_check_password(msg: Message, session: DataInteraction):
+async def handle_check_password(msg: Message, session: DataInteraction, state: FSMContext):
     if msg.text != PASSWORD:
         await msg.answer('Пароль неверный, пожалуйста попробуйте еще раз')
         return
     await msg.answer('Проверка прошла успешно, вы можете дальше пользоваться ботом')
+    await state.clear()
     await session.set_authorized(msg.from_user.id)
