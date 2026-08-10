@@ -6,7 +6,7 @@ from aiogram_dialog import DialogManager, StartMode
 from database.action_data_class import DataInteraction
 from states.state_groups import startSG, AuthorizeSG
 
-PASSWORD = ''
+PASSWORD = '2236'
 
 user_router = Router()
 

@@ -33,6 +33,7 @@ class RemindMiddleware(BaseMiddleware):
         session: DataInteraction = data.get('session')
         await session.set_activity(user_id=user.id)
 
+        result = await handler(event, data)
         db_user = await db.get_user(user.id)
         if not db_user.authorized:
             await bot.send_message(
@@ -41,6 +42,4 @@ class RemindMiddleware(BaseMiddleware):
             )
             await context.set_state(AuthorizeSG.get_password)
             return
-
-        result = await handler(event, data)
         return result
