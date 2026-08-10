@@ -2,7 +2,7 @@ import logging
 from typing import Any, Awaitable, Callable, Dict
 
 from aiogram import BaseMiddleware, Bot
-from aiogram.types import TelegramObject, User, CallbackQuery
+from aiogram.types import TelegramObject, User, CallbackQuery, Update
 from aiogram.fsm.context import FSMContext
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
@@ -18,7 +18,7 @@ class RemindMiddleware(BaseMiddleware):
     async def __call__(
         self,
         handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
-        event: TelegramObject,
+        event: Update,
         data: Dict[str, Any]
     ) -> Any:
         user: User = data.get('event_from_user')
@@ -33,9 +33,9 @@ class RemindMiddleware(BaseMiddleware):
         session: DataInteraction = data.get('session')
         await session.set_activity(user_id=user.id)
 
-        print(type(event))
+        print(event.callback_query)
         print(await context.get_state())
-        if isinstance(event, CallbackQuery) and (await context.get_state()) == AuthorizeSG.get_password:
+        if event.callback_query and (await context.get_state()) == AuthorizeSG.get_password:
             return
 
 
