@@ -2,7 +2,7 @@ import logging
 from typing import Any, Awaitable, Callable, Dict
 
 from aiogram import BaseMiddleware, Bot
-from aiogram.types import TelegramObject, User
+from aiogram.types import TelegramObject, User, CallbackQuery
 from aiogram.fsm.context import FSMContext
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
@@ -33,7 +33,14 @@ class RemindMiddleware(BaseMiddleware):
         session: DataInteraction = data.get('session')
         await session.set_activity(user_id=user.id)
 
+        print(type(event))
+        print(await context.get_state())
+        if isinstance(event, CallbackQuery) and (await context.get_state()) == AuthorizeSG.get_password:
+            return
+
+
         result = await handler(event, data)
+
         db_user = await db.get_user(user.id)
         if not db_user.authorized:
             await bot.send_message(
