@@ -57,7 +57,7 @@ async def main():
     dp = Dispatcher()
 
     # подключаем роутеры
-    dp.include_routers(user_router, *get_dialogs())
+    dp.include_routers(*get_dialogs(), user_router)
 
     # подключаем middleware
     dp.update.outer_middleware(BlockMiddleware())
